@@ -1,0 +1,38 @@
+{
+  "name": "cms",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/cms/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run develop",
+        "cwd": "apps/cms"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run start",
+        "cwd": "apps/cms"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build",
+        "cwd": "apps/cms"
+      },
+      "outputs": ["{projectRoot}/dist", "{projectRoot}/build", "{projectRoot}/.strapi"]
+    },
+    "strapi": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run strapi --",
+        "cwd": "apps/cms"
+      }
+    }
+  },
+  "tags": ["type:app", "scope:cms"]
+}
