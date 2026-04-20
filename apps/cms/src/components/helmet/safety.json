@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_helmet_safeties",
+  "info": {
+    "displayName": "Safety",
+    "description": "Helmet-specific safety attributes"
+  },
+  "options": {},
+  "attributes": {
+    "certification": {
+      "type": "enumeration",
+      "enum": ["ECE-22-06", "DOT", "SNELL", "SHARP"]
+    },
+    "rating": {
+      "type": "string"
+    },
+    "visorType": {
+      "type": "enumeration",
+      "enum": ["full-face", "modular", "open-face", "half"]
+    },
+    "shellMaterial": {
+      "type": "enumeration",
+      "enum": ["polycarbonate", "fiberglass", "carbon-fiber"]
+    }
+  }
+}

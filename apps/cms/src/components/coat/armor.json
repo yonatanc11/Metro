@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_coat_armors",
+  "info": {
+    "displayName": "Armor",
+    "description": "Coat/jacket-specific armor attributes"
+  },
+  "options": {},
+  "attributes": {
+    "shoulderArmor": {
+      "type": "boolean",
+      "default": false
+    },
+    "elbowArmor": {
+      "type": "boolean",
+      "default": false
+    },
+    "backArmor": {
+      "type": "boolean",
+      "default": false
+    },
+    "waterproofRating": {
+      "type": "string"
+    },
+    "season": {
+      "type": "enumeration",
+      "enum": ["summer", "winter", "all-season"]
+    },
+    "material": {
+      "type": "string"
+    }
+  }
+}
