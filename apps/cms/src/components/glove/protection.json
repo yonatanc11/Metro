@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_glove_protections",
+  "info": {
+    "displayName": "Protection",
+    "description": "Glove-specific protection attributes"
+  },
+  "options": {},
+  "attributes": {
+    "knuckleArmor": {
+      "type": "boolean",
+      "default": false
+    },
+    "palmSlider": {
+      "type": "boolean",
+      "default": false
+    },
+    "fingerType": {
+      "type": "enumeration",
+      "enum": ["full", "half", "touchscreen"]
+    },
+    "season": {
+      "type": "enumeration",
+      "enum": ["summer", "winter", "all-season"]
+    },
+    "material": {
+      "type": "string"
+    }
+  }
+}

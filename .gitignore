@@ -42,11 +42,22 @@ Thumbs.db
 .nx/workspace-data
 .claude/worktrees
 .claude/settings.local.json
+.claude/*.lock
+.claude/plans/
 
 .nx/polygraph
 
 # Next.js
 .next
 out
+
+# local env files (standard Next.js pattern)
+.env*.local
+
+# local dev harness pages (never committed)
+apps/web/src/app/dev/
+
+# Strapi regenerates these on every dev boot / build
+apps/cms/types/generated/
 
 test-output
