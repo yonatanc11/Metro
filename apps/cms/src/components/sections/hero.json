@@ -2,12 +2,15 @@
   "collectionName": "components_sections_heroes",
   "info": {
     "displayName": "Hero",
-    "description": "Full-width hero banner: heading, optional subheading, background image, optional CTA"
+    "description": "Full-width hero: eyebrow chip, rich headline (inline emphasis marks as primary accent), optional subheading, background image, primary and secondary CTAs"
   },
   "options": {},
   "attributes": {
-    "heading": {
-      "type": "string",
+    "eyebrow": {
+      "type": "string"
+    },
+    "headingRich": {
+      "type": "blocks",
       "required": true
     },
     "subheading": {
@@ -23,6 +26,12 @@
       "type": "string"
     },
     "ctaHref": {
+      "type": "string"
+    },
+    "secondaryCtaLabel": {
+      "type": "string"
+    },
+    "secondaryCtaHref": {
       "type": "string"
     }
   }

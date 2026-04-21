@@ -1,12 +1,43 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+@import "tailwindcss";
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  font-family: system-ui, sans-serif;
+@theme {
+  --color-background: #131313;
+  --color-on-background: #e5e2e1;
+
+  --color-surface: #131313;
+  --color-surface-dim: #131313;
+  --color-surface-bright: #393939;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-surface-container-low: #1c1b1b;
+  --color-surface-container: #201f1f;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #353534;
+  --color-surface-variant: #353534;
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #e2bfb0;
+
+  --color-primary: #ffb692;
+  --color-primary-container: #ff6d00;
+  --color-on-primary: #562000;
+  --color-on-primary-container: #582100;
+
+  --color-secondary: #b4cad6;
+  --color-secondary-container: #374c56;
+  --color-on-secondary: #1e333c;
+  --color-on-secondary-container: #a6bcc7;
+
+  --color-tertiary: #81cfff;
+  --color-tertiary-container: #00a4e1;
+  --color-on-tertiary: #00344b;
+  --color-on-tertiary-container: #00364d;
+
+  --color-outline: #a98a7c;
+  --color-outline-variant: #594136;
+
+  --font-headline: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-label: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
 }
