@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { ArrowOutwardIcon } from '@/components/ui/icons';
 import type { CategoryCardSize } from '@/lib/cms/types';
 
 type Props = {
@@ -34,14 +35,6 @@ const imageSizes: Record<CategoryCardSize, string> = {
   standard: '(min-width: 768px) 33vw, 100vw',
   wide: '100vw',
 };
-
-function ArrowOutward({ className = 'h-5 w-5' }: { className?: string }) {
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" className={`${className} fill-current`}>
-      <path d="M6 17.59L15.17 8.41H7V6h12v12h-2.41V9.83L7.41 19z" />
-    </svg>
-  );
-}
 
 export function CategoryCard({
   href,
@@ -103,7 +96,7 @@ export function CategoryCard({
               size === 'standard' ? 'h-10 w-10' : 'h-12 w-12'
             }`}
           >
-            <ArrowOutward
+            <ArrowOutwardIcon
               className={size === 'standard' ? 'h-4 w-4' : 'h-5 w-5'}
             />
           </div>

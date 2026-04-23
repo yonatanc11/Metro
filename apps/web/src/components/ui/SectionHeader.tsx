@@ -1,3 +1,5 @@
+import { ArrowRightIcon } from '@/components/ui/icons';
+
 type Props = {
   heading: string;
   subheading?: string | null;
@@ -28,13 +30,7 @@ export function SectionHeader({
           className="inline-flex items-center gap-1 self-start border-b border-primary/30 pb-1 font-headline font-bold uppercase tracking-wider text-primary transition-colors hover:text-primary-container md:self-auto"
         >
           {viewAllLabel}
-          <svg
-            aria-hidden
-            viewBox="0 0 24 24"
-            className="h-4 w-4 fill-current"
-          >
-            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
-          </svg>
+          <ArrowRightIcon className="h-4 w-4" />
         </a>
       )}
     </div>
