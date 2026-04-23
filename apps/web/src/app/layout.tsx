@@ -1,6 +1,7 @@
 import './global.css';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import { SiteHeader } from '@/components/layout/SiteHeader';
+import { SiteFooter } from '@/components/layout/SiteFooter';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className="bg-background text-on-background font-body antialiased min-h-screen flex flex-col selection:bg-primary selection:text-on-primary">
         <SiteHeader />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );
