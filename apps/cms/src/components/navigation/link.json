@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_navigation_links",
+  "info": {
+    "displayName": "Navigation Link",
+    "description": "A single nav entry. Target is polymorphic: a Category relation (canonical), or a raw URL for external destinations. If no target is set, the link renders inert."
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "kind": {
+      "type": "enumeration",
+      "enum": ["category", "external"],
+      "required": true,
+      "default": "category"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::category.category"
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}
