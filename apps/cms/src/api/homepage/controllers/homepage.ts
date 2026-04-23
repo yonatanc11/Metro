@@ -6,7 +6,20 @@ export default factories.createCoreController('api::homepage.homepage', () => ({
     ctx.query = {
       ...ctx.query,
       populate: {
-        sections: { populate: '*' },
+        sections: {
+          on: {
+            'sections.hero': { populate: '*' },
+            'sections.featured-categories': {
+              populate: {
+                cards: {
+                  populate: {
+                    category: { populate: { heroImage: true } },
+                  },
+                },
+              },
+            },
+          },
+        },
         seo: { populate: '*' },
       },
     };

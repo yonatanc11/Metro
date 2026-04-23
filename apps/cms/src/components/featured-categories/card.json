@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_featured_categories_cards",
+  "info": {
+    "displayName": "Featured Category Card",
+    "description": "One tile in a featured-categories bento grid: references a category and picks a tile size (large = 2/3 col, standard = 1/3 col, wide = full-width row)"
+  },
+  "options": {},
+  "attributes": {
+    "category": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::category.category"
+    },
+    "size": {
+      "type": "enumeration",
+      "enum": ["large", "standard", "wide"],
+      "required": true,
+      "default": "standard"
+    },
+    "eyebrow": {
+      "type": "string"
+    },
+    "ctaLabel": {
+      "type": "string"
+    }
+  }
+}

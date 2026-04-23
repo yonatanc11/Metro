@@ -14,7 +14,7 @@
   "attributes": {
     "sections": {
       "type": "dynamiczone",
-      "components": ["sections.hero"]
+      "components": ["sections.hero", "sections.featured-categories"]
     },
     "seo": {
       "type": "component",
