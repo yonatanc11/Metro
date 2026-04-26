@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getFooter } from '@/lib/cms/footer';
-import { resolveLinkHref } from '@/lib/cms/navigation';
+import { resolveLinkHref } from '@/lib/cms/links';
 
 export async function SiteFooter() {
   const footer = await getFooter();

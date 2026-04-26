@@ -1,12 +1,9 @@
 import Link from 'next/link';
 import { IconButton } from '@/components/ui/IconButton';
-import {
-  BagIcon,
-  MenuIcon,
-  PersonIcon,
-  SearchIcon,
-} from '@/components/ui/icons';
-import { getNavigation, resolveLinkHref } from '@/lib/cms/navigation';
+import { BagIcon, PersonIcon, SearchIcon } from '@/components/ui/icons';
+import { getNavigation } from '@/lib/cms/navigation';
+import { resolveLinkHref } from '@/lib/cms/links';
+import { MobileNav } from './MobileNav';
 
 export async function SiteHeader() {
   const nav = await getNavigation();
@@ -16,12 +13,7 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-50 bg-surface/70 shadow-ambient backdrop-blur-md">
       <div className="relative mx-auto flex w-full max-w-screen-2xl items-center justify-between px-6 py-4 md:px-8">
         <div className="flex items-center">
-          <IconButton
-            aria-label="Open menu"
-            className="text-on-background/60 hover:text-on-background md:hidden"
-          >
-            <MenuIcon className="h-6 w-6" />
-          </IconButton>
+          <MobileNav links={links} />
           <Link
             href="/"
             className="hidden font-headline text-2xl font-black italic tracking-tighter text-on-background md:block"
