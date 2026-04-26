@@ -4,3 +4,4 @@ export { PersonIcon } from './PersonIcon';
 export { MenuIcon } from './MenuIcon';
 export { ArrowOutwardIcon } from './ArrowOutwardIcon';
 export { ArrowRightIcon } from './ArrowRightIcon';
+export { StarIcon } from './StarIcon';
