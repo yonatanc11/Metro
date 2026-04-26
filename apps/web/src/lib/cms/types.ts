@@ -84,3 +84,18 @@ export type Homepage = {
   sections: Section[];
   seo: Seo | null;
 };
+
+export type NavigationLink = {
+  __component: 'navigation.link';
+  id: number;
+  label: string;
+  kind: 'category' | 'external';
+  category: Pick<Category, 'id' | 'name' | 'slug'> | null;
+  url: string | null;
+};
+
+export type Navigation = {
+  id: number;
+  documentId: string;
+  items: NavigationLink[];
+};

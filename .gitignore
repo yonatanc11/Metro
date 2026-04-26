@@ -40,10 +40,11 @@ Thumbs.db
 
 .nx/cache
 .nx/workspace-data
-.claude/worktrees
-.claude/settings.local.json
-.claude/*.lock
-.claude/plans/
+
+# Claude Code / MCP — nothing new gets committed
+.claude/*
+!.claude/settings.json
+.mcp.json
 
 .nx/polygraph
 
@@ -59,5 +60,8 @@ apps/web/src/app/dev/
 
 # Strapi regenerates these on every dev boot / build
 apps/cms/types/generated/
+
+# one-off seed scripts — local-only, data lives in the cloud
+apps/cms/scripts/
 
 test-output
