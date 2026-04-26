@@ -1,72 +1,12 @@
 import Link from 'next/link';
+import { IconButton } from '@/components/ui/IconButton';
+import {
+  BagIcon,
+  MenuIcon,
+  PersonIcon,
+  SearchIcon,
+} from '@/components/ui/icons';
 import { getNavigation, resolveLinkHref } from '@/lib/cms/navigation';
-
-function IconButton({
-  'aria-label': ariaLabel,
-  children,
-  className = '',
-}: {
-  'aria-label': string;
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={ariaLabel}
-      className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors active:scale-95 ${className}`}
-    >
-      {children}
-    </button>
-  );
-}
-
-const iconProps = {
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  strokeWidth: 1.75,
-  strokeLinecap: 'round' as const,
-  strokeLinejoin: 'round' as const,
-};
-
-function SearchIcon({ className }: { className?: string }) {
-  return (
-    <svg {...iconProps} className={className} aria-hidden="true">
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" />
-    </svg>
-  );
-}
-
-function BagIcon({ className }: { className?: string }) {
-  return (
-    <svg {...iconProps} className={className} aria-hidden="true">
-      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-      <path d="M3 6h18" />
-      <path d="M16 10a4 4 0 0 1-8 0" />
-    </svg>
-  );
-}
-
-function PersonIcon({ className }: { className?: string }) {
-  return (
-    <svg {...iconProps} className={className} aria-hidden="true">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  );
-}
-
-function MenuIcon({ className }: { className?: string }) {
-  return (
-    <svg {...iconProps} className={className} aria-hidden="true">
-      <path d="M3 6h18" />
-      <path d="M3 12h18" />
-      <path d="M3 18h18" />
-    </svg>
-  );
-}
 
 export async function SiteHeader() {
   const nav = await getNavigation();
