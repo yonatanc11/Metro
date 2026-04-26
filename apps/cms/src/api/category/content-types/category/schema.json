@@ -35,6 +35,13 @@
       "relation": "oneToMany",
       "target": "api::product.product",
       "mappedBy": "category"
+    },
+    "pageSections": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.hero",
+        "sections.featured-categories"
+      ]
     }
   }
 }

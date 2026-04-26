@@ -40,6 +40,33 @@ export type HeroSection = {
   secondaryCtaHref: string | null;
 };
 
+export type Brand = {
+  id: number;
+  documentId: string;
+  name: string;
+  slug: string;
+};
+
+export type Currency = 'USD' | 'EUR' | 'ILS';
+
+export type BadgeTone = 'new' | 'sale' | 'feature';
+
+export type Product = {
+  id: number;
+  documentId: string;
+  title: string;
+  slug: string;
+  shortDescription: string | null;
+  price: number;
+  currency: Currency;
+  rating: number | null;
+  reviewCount: number | null;
+  badgeLabel: string | null;
+  badgeTone: BadgeTone | null;
+  images: StrapiMedia[];
+  brand: Brand | null;
+};
+
 export type Category = {
   id: number;
   documentId: string;
@@ -47,6 +74,8 @@ export type Category = {
   slug: string;
   description: string | null;
   heroImage: StrapiMedia | null;
+  products?: Product[];
+  pageSections?: Section[];
 };
 
 export type CategoryCardSize = 'large' | 'standard' | 'wide';

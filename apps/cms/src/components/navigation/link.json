@@ -12,13 +12,16 @@
     },
     "kind": {
       "type": "enumeration",
-      "enum": ["category", "external"],
       "required": true,
-      "default": "category"
+      "default": "category",
+      "enum": [
+        "category",
+        "external"
+      ]
     },
     "category": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "api::category.category"
     },
     "url": {
