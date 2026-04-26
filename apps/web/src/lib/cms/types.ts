@@ -99,3 +99,10 @@ export type Navigation = {
   documentId: string;
   items: NavigationLink[];
 };
+
+export type Footer = {
+  id: number;
+  documentId: string;
+  links: NavigationLink[];
+  copyright: string | null;
+};
