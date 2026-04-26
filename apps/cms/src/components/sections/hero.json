@@ -22,17 +22,15 @@
       "required": true,
       "allowedTypes": ["images"]
     },
-    "ctaLabel": {
-      "type": "string"
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "navigation.link"
     },
-    "ctaHref": {
-      "type": "string"
-    },
-    "secondaryCtaLabel": {
-      "type": "string"
-    },
-    "secondaryCtaHref": {
-      "type": "string"
+    "secondaryCta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "navigation.link"
     }
   }
 }

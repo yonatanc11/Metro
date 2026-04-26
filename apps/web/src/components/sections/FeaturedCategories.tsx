@@ -13,8 +13,7 @@ export function FeaturedCategories({
         <SectionHeader
           heading={section.heading}
           subheading={section.subheading}
-          viewAllLabel={section.viewAllLabel}
-          viewAllHref={section.viewAllHref}
+          viewAll={section.viewAll}
         />
         <div className="grid grid-cols-1 gap-4 md:auto-rows-[300px] md:grid-cols-12 md:gap-6">
           {section.cards.map((card) => {

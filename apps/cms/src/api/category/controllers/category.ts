@@ -1,6 +1,10 @@
 import { factories } from '@strapi/strapi';
 import type { Context } from 'koa';
 
+const linkPopulate = {
+  category: { fields: ['name', 'slug'] },
+} as const;
+
 const populate = {
   heroImage: true,
   products: {
@@ -11,9 +15,16 @@ const populate = {
   },
   pageSections: {
     on: {
-      'sections.hero': { populate: '*' },
+      'sections.hero': {
+        populate: {
+          backgroundImage: true,
+          cta: { populate: linkPopulate },
+          secondaryCta: { populate: linkPopulate },
+        },
+      },
       'sections.featured-categories': {
         populate: {
+          viewAll: { populate: linkPopulate },
           cards: {
             populate: {
               category: { populate: { heroImage: true } },

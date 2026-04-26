@@ -34,10 +34,8 @@ export type HeroSection = {
   headingRich: StrapiBlockNode[];
   subheading: string | null;
   backgroundImage: StrapiMedia;
-  ctaLabel: string | null;
-  ctaHref: string | null;
-  secondaryCtaLabel: string | null;
-  secondaryCtaHref: string | null;
+  cta: NavigationLink | null;
+  secondaryCta: NavigationLink | null;
 };
 
 export type Brand = {
@@ -93,8 +91,7 @@ export type FeaturedCategoriesSection = {
   id: number;
   heading: string;
   subheading: string | null;
-  viewAllLabel: string | null;
-  viewAllHref: string | null;
+  viewAll: NavigationLink | null;
   cards: FeaturedCategoryCard[];
 };
 

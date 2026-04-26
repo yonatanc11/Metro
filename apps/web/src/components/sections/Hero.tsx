@@ -2,13 +2,14 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { RichHeading } from '@/components/ui/RichHeading';
+import { resolveCtaHref } from '@/lib/cms/links';
 import type { HeroSection } from '@/lib/cms/types';
 
 export function Hero({ section }: { section: HeroSection }) {
-  const hasPrimary = Boolean(section.ctaLabel && section.ctaHref);
-  const hasSecondary = Boolean(
-    section.secondaryCtaLabel && section.secondaryCtaHref,
-  );
+  const primaryHref = resolveCtaHref(section.cta);
+  const secondaryHref = resolveCtaHref(section.secondaryCta);
+  const hasPrimary = Boolean(primaryHref && section.cta?.label);
+  const hasSecondary = Boolean(secondaryHref && section.secondaryCta?.label);
 
   return (
     <section className="relative flex min-h-187.75 items-end overflow-hidden bg-surface-container-lowest pb-20 md:min-h-230.25 md:items-center md:pb-24">
@@ -37,16 +38,13 @@ export function Hero({ section }: { section: HeroSection }) {
           {(hasPrimary || hasSecondary) && (
             <div className="mt-4 flex w-full flex-col gap-4 sm:w-auto sm:flex-row md:mt-8">
               {hasPrimary && (
-                <Button variant="primary" href={section.ctaHref as string}>
-                  {section.ctaLabel}
+                <Button variant="primary" href={primaryHref as string}>
+                  {section.cta?.label}
                 </Button>
               )}
               {hasSecondary && (
-                <Button
-                  variant="secondary"
-                  href={section.secondaryCtaHref as string}
-                >
-                  {section.secondaryCtaLabel}
+                <Button variant="secondary" href={secondaryHref as string}>
+                  {section.secondaryCta?.label}
                 </Button>
               )}
             </div>

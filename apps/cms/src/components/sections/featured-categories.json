@@ -13,11 +13,10 @@
     "subheading": {
       "type": "text"
     },
-    "viewAllLabel": {
-      "type": "string"
-    },
-    "viewAllHref": {
-      "type": "string"
+    "viewAll": {
+      "type": "component",
+      "repeatable": false,
+      "component": "navigation.link"
     },
     "cards": {
       "type": "component",

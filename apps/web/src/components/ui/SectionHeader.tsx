@@ -1,19 +1,17 @@
 import { ArrowRightIcon } from '@/components/ui/icons';
+import { resolveCtaHref } from '@/lib/cms/links';
+import type { NavigationLink } from '@/lib/cms/types';
 
 type Props = {
   heading: string;
   subheading?: string | null;
-  viewAllLabel?: string | null;
-  viewAllHref?: string | null;
+  viewAll?: NavigationLink | null;
 };
 
-export function SectionHeader({
-  heading,
-  subheading,
-  viewAllLabel,
-  viewAllHref,
-}: Props) {
-  const hasViewAll = Boolean(viewAllLabel && viewAllHref);
+export function SectionHeader({ heading, subheading, viewAll }: Props) {
+  const viewAllHref = resolveCtaHref(viewAll ?? null);
+  const hasViewAll = Boolean(viewAllHref && viewAll?.label);
+
   return (
     <div className="mb-8 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between md:gap-8">
       <div>
@@ -29,7 +27,7 @@ export function SectionHeader({
           href={viewAllHref as string}
           className="inline-flex items-center gap-1 self-start border-b border-primary/30 pb-1 font-headline font-bold uppercase tracking-wider text-primary transition-colors hover:text-primary-container md:self-auto"
         >
-          {viewAllLabel}
+          {viewAll?.label}
           <ArrowRightIcon className="h-4 w-4" />
         </a>
       )}
