@@ -40,7 +40,36 @@ export type HeroSection = {
   secondaryCtaHref: string | null;
 };
 
-export type Section = HeroSection;
+export type Category = {
+  id: number;
+  documentId: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  heroImage: StrapiMedia | null;
+};
+
+export type CategoryCardSize = 'large' | 'standard' | 'wide';
+
+export type FeaturedCategoryCard = {
+  id: number;
+  size: CategoryCardSize;
+  eyebrow: string | null;
+  ctaLabel: string | null;
+  category: Category | null;
+};
+
+export type FeaturedCategoriesSection = {
+  __component: 'sections.featured-categories';
+  id: number;
+  heading: string;
+  subheading: string | null;
+  viewAllLabel: string | null;
+  viewAllHref: string | null;
+  cards: FeaturedCategoryCard[];
+};
+
+export type Section = HeroSection | FeaturedCategoriesSection;
 
 export type Seo = {
   id: number;

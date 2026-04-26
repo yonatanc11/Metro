@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_sections_featured_categories",
+  "info": {
+    "displayName": "Featured Categories",
+    "description": "Bento grid of category tiles: heading + optional subheading and View All link, with repeatable sized cards pulling from the Category content type"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "subheading": {
+      "type": "text"
+    },
+    "viewAllLabel": {
+      "type": "string"
+    },
+    "viewAllHref": {
+      "type": "string"
+    },
+    "cards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "featured-categories.card"
+    }
+  }
+}
