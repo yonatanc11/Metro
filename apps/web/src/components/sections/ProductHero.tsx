@@ -83,7 +83,7 @@ export function ProductHero({ product, ctaLabel, shippingNote }: Props) {
                 fill
                 priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-contain opacity-90 mix-blend-luminosity lg:mix-blend-normal lg:opacity-100"
+                className="object-contain opacity-90 lg:mix-blend-normal lg:opacity-100"
               />
             )}
             <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-surface-container-lowest to-transparent" />

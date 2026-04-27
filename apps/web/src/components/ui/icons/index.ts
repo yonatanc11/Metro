@@ -8,3 +8,7 @@ export { ArrowRightIcon } from './ArrowRightIcon';
 export { StarIcon } from './StarIcon';
 export { ChevronRightIcon } from './ChevronRightIcon';
 export { TruckIcon } from './TruckIcon';
+export { PlusIcon } from './PlusIcon';
+export { MinusIcon } from './MinusIcon';
+export { TrashIcon } from './TrashIcon';
+export { LockIcon } from './LockIcon';

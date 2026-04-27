@@ -34,6 +34,8 @@
   --color-outline: #a98a7c;
   --color-outline-variant: #594136;
 
+  --color-error: #ffb4ab;
+
   --font-headline: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-label: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
