@@ -49,6 +49,12 @@ export type Currency = 'USD' | 'EUR' | 'ILS';
 
 export type BadgeTone = 'new' | 'sale' | 'feature';
 
+export type ProductSpec = {
+  id: number;
+  label: string;
+  value: string;
+};
+
 export type Product = {
   id: number;
   documentId: string;
@@ -63,6 +69,20 @@ export type Product = {
   badgeTone: BadgeTone | null;
   images: StrapiMedia[];
   brand: Brand | null;
+  description?: StrapiBlockNode[] | null;
+  specs?: ProductSpec[];
+  category?: Pick<Category, 'id' | 'name' | 'slug'> | null;
+  ctaLabel?: string | null;
+  shippingNote?: string | null;
+  pageSections?: ProductSection[];
+};
+
+export type ProductPage = {
+  id: number;
+  documentId: string;
+  ctaLabel: string;
+  shippingNote: string | null;
+  sections: ProductSection[];
 };
 
 export type Category = {
@@ -95,7 +115,19 @@ export type FeaturedCategoriesSection = {
   cards: FeaturedCategoryCard[];
 };
 
-export type Section = HeroSection | FeaturedCategoriesSection;
+export type RichContentSection = {
+  __component: 'sections.rich-content';
+  id: number;
+  heading: string | null;
+  body: StrapiBlockNode[];
+};
+
+export type Section =
+  | HeroSection
+  | FeaturedCategoriesSection
+  | RichContentSection;
+
+export type ProductSection = RichContentSection;
 
 export type Seo = {
   id: number;

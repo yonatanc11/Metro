@@ -30,6 +30,21 @@ export async function getProductsByCategorySlug(
   return strapiFetch<Product[]>(`/api/products?${params.toString()}`);
 }
 
+export async function getProductBySlug(
+  categorySlug: string,
+  productSlug: string
+): Promise<Product | null> {
+  const params = new URLSearchParams();
+  params.set('filters[slug][$eq]', productSlug);
+  params.set('filters[category][slug][$eq]', categorySlug);
+  params.set('pagination[pageSize]', '1');
+
+  const products = await strapiFetch<Product[]>(
+    `/api/products?${params.toString()}`
+  );
+  return products[0] ?? null;
+}
+
 export type PriceBounds = {
   min: number;
   max: number;

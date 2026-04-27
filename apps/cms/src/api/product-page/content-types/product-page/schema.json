@@ -1,0 +1,28 @@
+{
+  "kind": "singleType",
+  "collectionName": "product_pages",
+  "info": {
+    "singularName": "product-page",
+    "pluralName": "product-pages",
+    "displayName": "Product Page",
+    "description": "Global defaults for every product page — CTA label, shipping note, and shared sections (reviews, info strips, etc.)"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ctaLabel": {
+      "type": "string",
+      "required": true,
+      "default": "Add to Loadout"
+    },
+    "shippingNote": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "dynamiczone",
+      "components": ["sections.rich-content"]
+    }
+  }
+}

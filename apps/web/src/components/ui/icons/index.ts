@@ -6,3 +6,5 @@ export { CloseIcon } from './CloseIcon';
 export { ArrowOutwardIcon } from './ArrowOutwardIcon';
 export { ArrowRightIcon } from './ArrowRightIcon';
 export { StarIcon } from './StarIcon';
+export { ChevronRightIcon } from './ChevronRightIcon';
+export { TruckIcon } from './TruckIcon';

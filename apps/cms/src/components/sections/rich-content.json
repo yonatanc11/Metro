@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_sections_rich_contents",
+  "info": {
+    "displayName": "Rich Content",
+    "description": "Generic editorial block: optional heading + rich-text body. Use for FAQ, care instructions, story blocks, etc."
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "body": {
+      "type": "blocks",
+      "required": true
+    }
+  }
+}

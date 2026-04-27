@@ -73,6 +73,16 @@
       "repeatable": false,
       "component": "shared.seo"
     },
+    "ctaLabel": {
+      "type": "string"
+    },
+    "shippingNote": {
+      "type": "string"
+    },
+    "pageSections": {
+      "type": "dynamiczone",
+      "components": ["sections.rich-content"]
+    },
     "category": {
       "type": "relation",
       "relation": "manyToOne",

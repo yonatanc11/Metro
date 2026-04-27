@@ -42,4 +42,5 @@
   --radius-xl: 0.5rem;
 
   --shadow-ambient: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --shadow-primary-glow: 0 20px 40px rgba(255, 109, 0, 0.2);
 }
