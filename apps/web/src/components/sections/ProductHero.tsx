@@ -4,7 +4,9 @@ import Image from 'next/image';
 import { Fragment, useState } from 'react';
 import { Chip } from '@/components/ui/Chip';
 import { RichText } from '@/components/ui/RichText';
+import { useToast } from '@/components/ui/Toast';
 import { ChevronRightIcon, TruckIcon } from '@/components/ui/icons';
+import { useCart } from '@/lib/cart/CartProvider';
 import type { Currency, Product } from '@/lib/cms/types';
 
 const localeByCurrency: Record<Currency, string> = {
@@ -30,9 +32,40 @@ type Props = {
 
 export function ProductHero({ product, ctaLabel, shippingNote }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const { state, addLine } = useCart();
+  const { show: showToast } = useToast();
   const images = product.images;
   const main = images[selectedIndex] ?? images[0] ?? null;
   const price = formatPrice(product.price, product.currency);
+
+  const primaryImage = images[0] ?? null;
+  const alreadyInCart = state.lines.some(
+    (l) => l.productDocumentId === product.documentId
+  );
+  const canAdd = product.category !== null && primaryImage !== null;
+
+  const handleAddToCart = () => {
+    if (!product.category || !primaryImage) return;
+    if (alreadyInCart) {
+      showToast('Item already added');
+      return;
+    }
+    addLine({
+      productDocumentId: product.documentId,
+      categorySlug: product.category.slug,
+      productSlug: product.slug,
+      quantity: 1,
+      snapshot: {
+        title: product.title,
+        brandName: product.brand?.name ?? null,
+        price: product.price,
+        currency: product.currency,
+        imageUrl: primaryImage.url,
+        imageAlt: primaryImage.alternativeText ?? null,
+      },
+    });
+    showToast('Added to loadout');
+  };
   const breadcrumbs = [
     product.category?.name?.toUpperCase(),
     product.brand?.name?.toUpperCase(),
@@ -133,7 +166,9 @@ export function ProductHero({ product, ctaLabel, shippingNote }: Props) {
 
           <button
             type="button"
-            className="w-full rounded-lg bg-primary py-5 font-headline text-base font-bold uppercase tracking-widest text-on-primary shadow-primary-glow transition-colors hover:bg-primary-container active:scale-[0.99] lg:py-6 lg:text-lg"
+            onClick={handleAddToCart}
+            disabled={!canAdd}
+            className="w-full rounded-lg bg-primary py-5 font-headline text-base font-bold uppercase tracking-widest text-on-primary shadow-primary-glow transition-colors hover:bg-primary-container active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 lg:py-6 lg:text-lg"
           >
             {ctaLabel}
           </button>

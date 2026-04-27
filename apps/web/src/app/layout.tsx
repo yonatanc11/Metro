@@ -2,6 +2,8 @@ import './global.css';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
+import { CartProvider } from '@/lib/cart/CartProvider';
+import { ToastProvider } from '@/components/ui/Toast';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -28,9 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
       <body className="bg-background text-on-background font-body antialiased min-h-screen flex flex-col selection:bg-primary selection:text-on-primary">
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        <CartProvider>
+          <ToastProvider>
+            <SiteHeader />
+            {children}
+            <SiteFooter />
+          </ToastProvider>
+        </CartProvider>
       </body>
     </html>
   );

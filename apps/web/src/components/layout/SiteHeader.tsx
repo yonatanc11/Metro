@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { IconButton } from '@/components/ui/IconButton';
-import { BagIcon, PersonIcon, SearchIcon } from '@/components/ui/icons';
+import { PersonIcon, SearchIcon } from '@/components/ui/icons';
 import { getNavigation } from '@/lib/cms/navigation';
 import { resolveLinkHref } from '@/lib/cms/links';
+import { CartHeaderLink } from './CartHeaderLink';
 import { MobileNav } from './MobileNav';
 
 export async function SiteHeader() {
@@ -47,9 +48,7 @@ export async function SiteHeader() {
           <IconButton aria-label="Search" className="hover:text-on-background">
             <SearchIcon className="h-5 w-5" />
           </IconButton>
-          <IconButton aria-label="Cart" className="hover:text-on-background">
-            <BagIcon className="h-5 w-5" />
-          </IconButton>
+          <CartHeaderLink />
           <IconButton aria-label="Account" className="hover:text-on-background">
             <PersonIcon className="h-5 w-5" />
           </IconButton>
