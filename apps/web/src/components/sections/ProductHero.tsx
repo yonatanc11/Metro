@@ -7,22 +7,9 @@ import { RichText } from '@/components/ui/RichText';
 import { useToast } from '@/components/ui/Toast';
 import { ChevronRightIcon, TruckIcon } from '@/components/ui/icons';
 import { useCart } from '@/lib/cart/CartProvider';
-import type { Currency, Product } from '@/lib/cms/types';
-
-const localeByCurrency: Record<Currency, string> = {
-  USD: 'en-US',
-  EUR: 'de-DE',
-  ILS: 'he-IL',
-};
-
-function formatPrice(amount: number, currency: Currency) {
-  return new Intl.NumberFormat(localeByCurrency[currency], {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(amount);
-}
+import type { Product } from '@/lib/cms/types';
+import { strings } from '@/strings';
+import { formatPrice } from '@/utils/price';
 
 type Props = {
   product: Product;
@@ -47,7 +34,7 @@ export function ProductHero({ product, ctaLabel, shippingNote }: Props) {
   const handleAddToCart = () => {
     if (!product.category || !primaryImage) return;
     if (alreadyInCart) {
-      showToast('Item already added');
+      showToast(strings.productHero.toastAlreadyAdded);
       return;
     }
     addLine({
@@ -64,7 +51,7 @@ export function ProductHero({ product, ctaLabel, shippingNote }: Props) {
         imageAlt: primaryImage.alternativeText ?? null,
       },
     });
-    showToast('Added to loadout');
+    showToast(strings.productHero.toastAdded);
   };
   const breadcrumbs = [
     product.category?.name?.toUpperCase(),
@@ -75,7 +62,7 @@ export function ProductHero({ product, ctaLabel, shippingNote }: Props) {
     <section className="bg-surface-container-lowest">
       <div className="mx-auto grid w-full max-w-screen-2xl grid-cols-1 lg:grid-cols-2 lg:gap-16">
         <div className="relative flex flex-col items-center justify-center bg-surface-container-low">
-          <div className="relative aspect-square w-full overflow-hidden lg:aspect-[4/5]">
+          <div className="relative aspect-square w-full overflow-hidden lg:aspect-4/5">
             {main && (
               <Image
                 src={main.url}
@@ -109,12 +96,12 @@ export function ProductHero({ product, ctaLabel, shippingNote }: Props) {
                     key={img.id}
                     type="button"
                     onClick={() => setSelectedIndex(i)}
-                    aria-label={`View image ${i + 1}`}
+                    aria-label={`${strings.productHero.viewImage} ${i + 1}`}
                     aria-pressed={active}
-                    className={`relative h-24 w-24 flex-shrink-0 snap-center overflow-hidden rounded-lg bg-surface shadow-ambient transition-opacity ${
+                    className={`relative h-24 w-24 shrink-0 snap-center overflow-hidden rounded-lg bg-surface shadow-ambient transition-opacity ${
                       active
-                        ? 'opacity-100 outline outline-1 outline-primary'
-                        : 'opacity-50 outline outline-1 outline-outline-variant/40 hover:opacity-100'
+                        ? 'opacity-100 outline outline-primary'
+                        : 'opacity-50 outline outline-outline-variant/40 hover:opacity-100'
                     }`}
                   >
                     <Image

@@ -3,10 +3,9 @@ import { ProductHero } from '@/components/sections/ProductHero';
 import { SectionRenderer } from '@/components/sections/SectionRenderer';
 import { getProductBySlug } from '@/lib/cms/product';
 import { getProductPage } from '@/lib/cms/productPage';
+import { strings } from '@/strings';
 
 type Params = { slug: string; productSlug: string };
-
-const FALLBACK_CTA_LABEL = 'Add to Loadout';
 
 export default async function ProductPage({
   params,
@@ -22,7 +21,7 @@ export default async function ProductPage({
   if (!product) notFound();
 
   const ctaLabel =
-    product.ctaLabel ?? productPage?.ctaLabel ?? FALLBACK_CTA_LABEL;
+    product.ctaLabel ?? productPage?.ctaLabel ?? strings.product.fallbackCta;
   const shippingNote =
     product.shippingNote ?? productPage?.shippingNote ?? null;
   const sections = [

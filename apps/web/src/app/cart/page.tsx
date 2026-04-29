@@ -1,7 +1,8 @@
+import { strings } from '@/strings';
 import { CartView } from './_components/CartView';
 
 export const metadata = {
-  title: 'Cart — Metro',
+  title: strings.meta.cartTitle,
 };
 
 export default function CartPage() {

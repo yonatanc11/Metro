@@ -3,13 +3,17 @@
 import Link from 'next/link';
 import { BagIcon } from '@/components/ui/icons';
 import { useCart } from '@/lib/cart/CartProvider';
+import { strings } from '@/strings';
 
 export function CartHeaderLink() {
   const { itemCount } = useCart();
+  const itemWord = (
+    itemCount === 1 ? strings.cart.itemSingular : strings.cart.itemPlural
+  ).toLowerCase();
   const label =
     itemCount === 0
-      ? 'Cart, empty'
-      : `Cart, ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`;
+      ? `${strings.header.cart}, ${strings.header.cartEmpty}`
+      : `${strings.header.cart}, ${itemCount} ${itemWord}`;
 
   return (
     <Link

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { StarIcon } from '@/components/ui/icons';
 import type { BadgeTone, Currency } from '@/lib/cms/types';
+import { formatPrice } from '@/utils/price';
 
 type Props = {
   href: string;
@@ -20,21 +21,6 @@ const badgeTones: Record<BadgeTone, string> = {
   sale: 'bg-tertiary-container text-on-tertiary-container',
   feature: 'bg-secondary-container text-on-secondary-container',
 };
-
-const localeByCurrency: Record<Currency, string> = {
-  USD: 'en-US',
-  EUR: 'de-DE',
-  ILS: 'he-IL',
-};
-
-function formatPrice(amount: number, currency: Currency) {
-  return new Intl.NumberFormat(localeByCurrency[currency], {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(amount);
-}
 
 export function ProductCard({
   href,

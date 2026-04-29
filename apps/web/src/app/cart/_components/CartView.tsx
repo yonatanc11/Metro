@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useCart } from '@/lib/cart/CartProvider';
+import { strings } from '@/strings';
+import { pluralize } from '@/utils/pluralize';
 import { CartLineRow } from './CartLineRow';
 import { CartSummary } from './CartSummary';
 import { MobileCheckoutBar } from './MobileCheckoutBar';
@@ -13,22 +15,27 @@ export function CartView() {
     return (
       <div className="flex flex-col items-center justify-center gap-6 py-24 text-center">
         <h1 className="font-headline text-4xl font-bold uppercase tracking-tighter text-on-surface lg:text-5xl">
-          Your cart is empty
+          {strings.cart.empty.title}
         </h1>
         <p className="font-body text-on-surface-variant">
-          Browse the catalog to start your loadout.
+          {strings.cart.empty.subtitle}
         </p>
         <Link
           href="/"
           className="rounded-lg bg-primary px-6 py-3 font-headline text-sm font-bold uppercase tracking-widest text-on-primary shadow-primary-glow transition-colors hover:bg-primary-container"
         >
-          Continue shopping
+          {strings.cart.empty.cta}
         </Link>
       </div>
     );
   }
 
   const currency = state.lines[0].snapshot.currency;
+  const itemLabel = pluralize(
+    itemCount,
+    strings.cart.itemSingular,
+    strings.cart.itemPlural
+  );
 
   return (
     <>
@@ -36,10 +43,10 @@ export function CartView() {
         <section className="flex grow flex-col gap-8">
           <div className="flex items-baseline justify-between border-b border-surface-variant pb-4">
             <h1 className="font-headline text-4xl font-bold uppercase tracking-tighter text-on-surface md:text-5xl">
-              Your Cart
+              {strings.cart.title}
             </h1>
             <span className="font-label text-sm text-on-surface-variant">
-              {itemCount} {itemCount === 1 ? 'Item' : 'Items'}
+              {itemCount} {itemLabel}
             </span>
           </div>
 

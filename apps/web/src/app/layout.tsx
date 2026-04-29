@@ -4,6 +4,7 @@ import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { CartProvider } from '@/lib/cart/CartProvider';
 import { ToastProvider } from '@/components/ui/Toast';
+import { strings } from '@/strings';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -18,8 +19,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: 'Metro',
-  description: 'Metro — motorcycle accessories',
+  title: strings.brand.name,
+  description: strings.brand.tagline,
 };
 
 export default function RootLayout({

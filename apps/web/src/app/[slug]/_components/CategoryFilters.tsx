@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useTransition } from 'react';
 import type { Brand } from '@/lib/cms/types';
 import type { PriceBounds } from '@/lib/cms/product';
+import { useBrandFilter } from '@/hooks/useBrandFilter';
+import { strings } from '@/strings';
 import { PriceRangeFilter } from './PriceRangeFilter';
 
 type Props = {
@@ -12,38 +12,17 @@ type Props = {
 };
 
 export function CategoryFilters({ brands, priceBounds }: Props) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
-
-  const selected = new Set(parseCsv(searchParams.get('brand')));
-
-  function toggleBrand(slug: string) {
-    const next = new Set(selected);
-    if (next.has(slug)) next.delete(slug);
-    else next.add(slug);
-
-    const params = new URLSearchParams(searchParams.toString());
-    if (next.size > 0) {
-      params.set('brand', Array.from(next).join(','));
-    } else {
-      params.delete('brand');
-    }
-    const qs = params.toString();
-    startTransition(() => {
-      router.replace(qs ? `?${qs}` : '?', { scroll: false });
-    });
-  }
+  const { selected, toggleBrand, isPending } = useBrandFilter();
 
   return (
     <div className="space-y-8">
       <div className="space-y-4">
         <h3 className="font-headline text-xl font-bold tracking-tight text-on-surface">
-          Brand
+          {strings.filters.brand.title}
         </h3>
         {brands.length === 0 ? (
           <p className="font-label text-sm text-on-surface-variant">
-            No brands available.
+            {strings.filters.brand.empty}
           </p>
         ) : (
           <div className="space-y-2">
@@ -74,12 +53,4 @@ export function CategoryFilters({ brands, priceBounds }: Props) {
       {priceBounds && <PriceRangeFilter bounds={priceBounds} />}
     </div>
   );
-}
-
-function parseCsv(value: string | null): string[] {
-  if (!value) return [];
-  return value
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
 }

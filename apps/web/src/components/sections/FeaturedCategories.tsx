@@ -1,6 +1,7 @@
 import { CategoryCard } from '@/components/ui/CategoryCard';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import type { FeaturedCategoriesSection } from '@/lib/cms/types';
+import { categoryHref } from '@/utils/routes';
 
 export function FeaturedCategories({
   section,
@@ -28,7 +29,7 @@ export function FeaturedCategories({
             return (
               <CategoryCard
                 key={card.id}
-                href={`/${category.slug}`}
+                href={categoryHref(category.slug)}
                 image={image}
                 title={category.name}
                 description={category.description}

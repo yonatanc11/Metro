@@ -3,6 +3,7 @@ import { IconButton } from '@/components/ui/IconButton';
 import { PersonIcon, SearchIcon } from '@/components/ui/icons';
 import { getNavigation } from '@/lib/cms/navigation';
 import { resolveLinkHref } from '@/lib/cms/links';
+import { strings } from '@/strings';
 import { CartHeaderLink } from './CartHeaderLink';
 import { MobileNav } from './MobileNav';
 
@@ -19,7 +20,7 @@ export async function SiteHeader() {
             href="/"
             className="hidden font-headline text-2xl font-black italic tracking-tighter text-on-background md:block"
           >
-            METRO
+            {strings.brand.wordmark}
           </Link>
         </div>
 
@@ -27,7 +28,7 @@ export async function SiteHeader() {
           href="/"
           className="absolute left-1/2 -translate-x-1/2 font-headline text-2xl font-bold uppercase tracking-tighter text-primary-container md:hidden"
         >
-          METRO
+          {strings.brand.wordmark}
         </Link>
 
         {links.length > 0 && (
@@ -45,11 +46,11 @@ export async function SiteHeader() {
         )}
 
         <div className="flex items-center gap-2 text-on-background/60 md:gap-4 md:text-primary-container">
-          <IconButton aria-label="Search" className="hover:text-on-background">
+          <IconButton aria-label={strings.header.search} className="hover:text-on-background">
             <SearchIcon className="h-5 w-5" />
           </IconButton>
           <CartHeaderLink />
-          <IconButton aria-label="Account" className="hover:text-on-background">
+          <IconButton aria-label={strings.header.account} className="hover:text-on-background">
             <PersonIcon className="h-5 w-5" />
           </IconButton>
         </div>

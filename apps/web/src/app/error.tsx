@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { strings } from '@/strings';
 
 export default function Error({
   error,
@@ -16,13 +17,13 @@ export default function Error({
   return (
     <main className="flex min-h-screen items-center justify-center p-8">
       <div className="max-w-md text-center">
-        <h1 className="text-4xl font-bold">Something went wrong</h1>
+        <h1 className="text-4xl font-bold">{strings.error.title}</h1>
         <p className="mt-2 text-neutral-600">{error.message}</p>
         <button
           onClick={reset}
           className="mt-4 inline-flex items-center rounded-md bg-black px-4 py-2 text-white transition hover:bg-neutral-800"
         >
-          Try again
+          {strings.error.retry}
         </button>
       </div>
     </main>

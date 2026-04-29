@@ -6,6 +6,7 @@ import { IconButton } from '@/components/ui/IconButton';
 import { CloseIcon, MenuIcon } from '@/components/ui/icons';
 import { resolveLinkHref } from '@/lib/cms/links';
 import type { NavigationLink } from '@/lib/cms/types';
+import { strings } from '@/strings';
 
 type Props = { links: NavigationLink[] };
 
@@ -24,7 +25,7 @@ export function MobileNav({ links }: Props) {
   return (
     <>
       <IconButton
-        aria-label={open ? 'Close menu' : 'Open menu'}
+        aria-label={open ? strings.header.closeMenu : strings.header.openMenu}
         aria-expanded={open}
         aria-controls="mobile-nav-panel"
         onClick={() => setOpen((o) => !o)}

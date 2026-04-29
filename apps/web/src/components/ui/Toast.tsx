@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { strings } from '@/strings';
 
 const DEFAULT_DURATION_MS = 2500;
 
@@ -57,7 +58,7 @@ function ToastViewport({ toasts }: { toasts: ToastItem[] }) {
   return createPortal(
     <div
       role="region"
-      aria-label="Notifications"
+      aria-label={strings.toast.region}
       className="pointer-events-none fixed inset-x-0 bottom-6 z-100 flex flex-col items-center gap-2 px-4"
     >
       {toasts.map((t) => (

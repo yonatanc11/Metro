@@ -4,7 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MinusIcon, PlusIcon, TrashIcon } from '@/components/ui/icons';
 import type { CartLine } from '@/lib/cart/types';
-import { formatPrice } from './formatPrice';
+import { strings } from '@/strings';
+import { formatPrice } from '@/utils/price';
+import { productHref } from '@/utils/routes';
 
 type Props = {
   line: CartLine;
@@ -14,7 +16,7 @@ type Props = {
 };
 
 export function CartLineRow({ line, onIncrease, onDecrease, onRemove }: Props) {
-  const href = `/${line.categorySlug}/${line.productSlug}`;
+  const href = productHref(line.categorySlug, line.productSlug);
   const unitPrice = formatPrice(line.snapshot.price, line.snapshot.currency);
 
   return (
@@ -56,7 +58,7 @@ export function CartLineRow({ line, onIncrease, onDecrease, onRemove }: Props) {
           <div className="flex items-center rounded border border-outline-variant/20 bg-surface-container-highest">
             <button
               type="button"
-              aria-label="Decrease quantity"
+              aria-label={strings.cart.line.decrease}
               onClick={onDecrease}
               className="px-3 py-1 text-on-surface-variant transition-colors hover:text-primary focus:outline-none focus:ring-1 focus:ring-inset focus:ring-primary"
             >
@@ -67,7 +69,7 @@ export function CartLineRow({ line, onIncrease, onDecrease, onRemove }: Props) {
             </span>
             <button
               type="button"
-              aria-label="Increase quantity"
+              aria-label={strings.cart.line.increase}
               onClick={onIncrease}
               className="px-3 py-1 text-on-surface-variant transition-colors hover:text-primary focus:outline-none focus:ring-1 focus:ring-inset focus:ring-primary"
             >
@@ -76,12 +78,12 @@ export function CartLineRow({ line, onIncrease, onDecrease, onRemove }: Props) {
           </div>
           <button
             type="button"
-            aria-label="Remove item"
+            aria-label={strings.cart.line.remove}
             onClick={onRemove}
             className="flex items-center gap-1 font-label text-xs uppercase tracking-wider text-on-surface-variant transition-colors hover:text-error focus:outline-none"
           >
             <TrashIcon className="h-4 w-4" />
-            Remove
+            {strings.cart.line.removeLabel}
           </button>
         </div>
       </div>

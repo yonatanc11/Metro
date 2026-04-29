@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getFooter } from '@/lib/cms/footer';
 import { resolveLinkHref } from '@/lib/cms/links';
+import { strings } from '@/strings';
 
 export async function SiteFooter() {
   const footer = await getFooter();
@@ -16,7 +17,7 @@ export async function SiteFooter() {
           href="/"
           className="font-headline text-lg font-bold italic tracking-tighter text-on-background"
         >
-          METRO
+          {strings.brand.wordmark}
         </Link>
 
         {links.length > 0 && (

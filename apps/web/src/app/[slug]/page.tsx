@@ -7,6 +7,11 @@ import {
 } from '@/lib/cms/product';
 import { ProductCard } from '@/components/ui/ProductCard';
 import { SectionRenderer } from '@/components/sections/SectionRenderer';
+import { strings } from '@/strings';
+import { parseNum } from '@/utils/number';
+import { pluralize } from '@/utils/pluralize';
+import { productHref } from '@/utils/routes';
+import { parseCsv } from '@/utils/string';
 import { CategoryFilters } from './_components/CategoryFilters';
 
 type Params = { slug: string };
@@ -41,6 +46,11 @@ export default async function CategoryPage({
   const pageSections = category.pageSections ?? [];
   const hasActiveFilters =
     brandSlugs.length > 0 || minPrice !== undefined || maxPrice !== undefined;
+  const resultsLabel = pluralize(
+    products.length,
+    strings.category.results.singular,
+    strings.category.results.plural
+  );
 
   return (
     <>
@@ -56,15 +66,15 @@ export default async function CategoryPage({
               {category.name}
             </h1>
             <span className="font-label text-sm text-on-surface-variant">
-              {products.length} {products.length === 1 ? 'result' : 'results'}
+              {products.length} {resultsLabel}
             </span>
           </div>
 
           {products.length === 0 ? (
             <p className="font-body text-sm text-on-surface-variant">
               {hasActiveFilters
-                ? 'No products match your filters.'
-                : 'No products in this category yet.'}
+                ? strings.category.empty.filtered
+                : strings.category.empty.unfiltered}
             </p>
           ) : (
             <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-3 lg:gap-8">
@@ -73,7 +83,7 @@ export default async function CategoryPage({
                 return (
                   <ProductCard
                     key={product.id}
-                    href={`/${slug}/${product.slug}`}
+                    href={productHref(slug, product.slug)}
                     image={
                       firstImage
                         ? {
@@ -105,18 +115,4 @@ export default async function CategoryPage({
       </main>
     </>
   );
-}
-
-function parseCsv(value: string | undefined): string[] {
-  if (!value) return [];
-  return value
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
-function parseNum(value: string | undefined): number | undefined {
-  if (!value) return undefined;
-  const n = Number(value);
-  return Number.isFinite(n) ? n : undefined;
 }
