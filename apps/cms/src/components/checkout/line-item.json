@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_checkout_line_items",
+  "info": {
+    "displayName": "Line Item",
+    "description": "Snapshot of a cart line at the moment an Order was created"
+  },
+  "options": {},
+  "attributes": {
+    "productDocumentId": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "brand": {
+      "type": "string"
+    },
+    "unitPrice": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": ["USD", "EUR", "ILS"],
+      "required": true
+    },
+    "quantity": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "imageUrl": {
+      "type": "string"
+    }
+  }
+}

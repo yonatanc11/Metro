@@ -1,0 +1,80 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order",
+    "description": "Transactional order record. Immutable snapshot at checkout; status flipped by Stripe webhook."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "status": {
+      "type": "enumeration",
+      "enum": ["pending", "paid", "failed", "cancelled"],
+      "default": "pending",
+      "required": true
+    },
+    "requestId": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": ["USD", "EUR", "ILS"],
+      "required": true
+    },
+    "amountSubtotal": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+    },
+    "amountTotal": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+    },
+    "lineItems": {
+      "type": "component",
+      "repeatable": true,
+      "component": "checkout.line-item",
+      "required": true
+    },
+    "stripePaymentIntentId": {
+      "type": "string",
+      "unique": true
+    },
+    "paidAt": {
+      "type": "datetime"
+    },
+    "shippingName": {
+      "type": "string"
+    },
+    "shippingLine1": {
+      "type": "string"
+    },
+    "shippingLine2": {
+      "type": "string"
+    },
+    "shippingCity": {
+      "type": "string"
+    },
+    "shippingState": {
+      "type": "string"
+    },
+    "shippingPostal": {
+      "type": "string"
+    },
+    "shippingCountry": {
+      "type": "string"
+    }
+  }
+}
