@@ -16,6 +16,13 @@ type StartBody = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const STATUS_FOR_CHECKOUT_ERROR: Record<string, number> = {
+  empty_cart: 400,
+  product_not_found: 400,
+  mixed_currency: 400,
+  order_not_pending: 409,
+};
+
 function parseStartBody(raw: unknown): StartBody | null {
   if (!raw || typeof raw !== 'object') return null;
   const body = raw as Record<string, unknown>;
@@ -60,19 +67,10 @@ export default {
         .createWithIntent(body);
       ctx.body = result;
     } catch (err: unknown) {
-      const code = err instanceof Error ? err.message : 'checkout_failed';
-      const knownClientErrors = new Set([
-        'product_not_found',
-        'mixed_currency',
-        'empty_cart',
-      ]);
-      if (knownClientErrors.has(code)) {
-        ctx.status = 400;
-        ctx.body = { error: code };
-        return;
-      }
-      if (code === 'order_not_pending') {
-        ctx.status = 409;
+      const code = err instanceof Error ? err.message : '';
+      const status = STATUS_FOR_CHECKOUT_ERROR[code];
+      if (status) {
+        ctx.status = status;
         ctx.body = { error: code };
         return;
       }
