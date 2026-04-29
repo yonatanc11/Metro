@@ -1,0 +1,23 @@
+# Agent OS Standards Index
+
+backend:
+  cms-page-composition:
+    description: Page-like content types compose via Strapi dynamiczone of sections.* components
+
+css:
+  design-tokens:
+    description: M3-style tokens in global.css @theme; no tailwind.config; promote recurring values
+  icons:
+    description: Inline SVG icons via shared strokeIconProps and currentColor; no icon libraries
+
+javascript:
+  component-variants:
+    description: Record<Variant, string> lookup tables for variants/sizes/tones; no cva or clsx
+  cta-rendering:
+    description: Render NavigationLink CTAs only when resolveCtaHref AND label are both present
+  section-renderer:
+    description: SectionRenderer switches on __component with exhaustive never check; sections are pure render
+  strapi-blocks:
+    description: Render blocks-field content only via RichText (body) or RichHeading (display)
+  strapi-fetch:
+    description: All Strapi calls go through strapiFetch<T>; null = absent, throw = HTTP failure
