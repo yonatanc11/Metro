@@ -1,5 +1,6 @@
 import type { Context } from 'koa';
 import { getStripe } from '../../../lib/stripe';
+import { maskEmail } from '../../../lib/email';
 
 const UNPARSED_BODY = Symbol.for('unparsedBody');
 
@@ -118,5 +119,58 @@ export default {
       ctx.status = 500;
       ctx.body = { error: 'handler_failed' };
     }
+  },
+
+  async getOrder(ctx: Context) {
+    const documentId = ctx.params.documentId;
+    if (typeof documentId !== 'string' || documentId.length === 0) {
+      ctx.status = 400;
+      ctx.body = { error: 'invalid_id' };
+      return;
+    }
+
+    const order = (await strapi
+      .documents('api::order.order')
+      .findOne({ documentId, populate: ['lineItems'] })) as
+      | (Record<string, unknown> & { documentId: string })
+      | null;
+
+    if (!order) {
+      ctx.status = 404;
+      ctx.body = { error: 'not_found' };
+      return;
+    }
+
+    ctx.body = {
+      orderId: order.documentId,
+      status: order.status,
+      email: maskEmail(order.email as string),
+      currency: order.currency,
+      amountSubtotal: order.amountSubtotal,
+      amountTotal: order.amountTotal,
+      lineItems: ((order.lineItems as Array<Record<string, unknown>>) ?? []).map(
+        (item) => ({
+          productDocumentId: item.productDocumentId,
+          title: item.title,
+          brand: item.brand ?? null,
+          unitPrice: item.unitPrice,
+          currency: item.currency,
+          quantity: item.quantity,
+          imageUrl: item.imageUrl ?? null,
+        })
+      ),
+      paidAt: order.paidAt ?? null,
+      shipping: order.shippingName
+        ? {
+            name: order.shippingName,
+            line1: order.shippingLine1 ?? null,
+            line2: order.shippingLine2 ?? null,
+            city: order.shippingCity ?? null,
+            state: order.shippingState ?? null,
+            postal: order.shippingPostal ?? null,
+            country: order.shippingCountry ?? null,
+          }
+        : null,
+    };
   },
 };
