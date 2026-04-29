@@ -1,5 +1,10 @@
 import { factories } from '@strapi/strapi';
 import { getStripe } from '../../../lib/stripe';
+import { toMinorUnits } from '../../../lib/money';
+import {
+  shippingFieldsFromIntent,
+  statusForEvent,
+} from '../../../lib/stripe-events';
 
 type LineInput = {
   productDocumentId: string;
@@ -21,48 +26,23 @@ type CreateWithIntentResult = {
   currency: Currency;
 };
 
-type OrderStatus = 'pending' | 'paid' | 'failed' | 'cancelled';
-
-function toMinorUnits(price: number | string): number {
-  const value = typeof price === 'string' ? Number(price) : price;
-  return Math.round(value * 100);
-}
-
-function statusForEvent(eventType: string): OrderStatus | null {
-  if (eventType === 'payment_intent.succeeded') return 'paid';
-  if (eventType === 'payment_intent.payment_failed') return 'failed';
-  if (eventType === 'payment_intent.canceled') return 'cancelled';
-  return null;
-}
-
-function shippingFieldsFromIntent(
-  intent: Record<string, unknown>
-): Record<string, unknown> {
-  const shipping = intent.shipping as
-    | {
-        name?: string | null;
-        address?: {
-          line1?: string | null;
-          line2?: string | null;
-          city?: string | null;
-          state?: string | null;
-          postal_code?: string | null;
-          country?: string | null;
-        } | null;
-      }
-    | null
-    | undefined;
-  if (!shipping) return {};
-  const address = shipping.address ?? {};
-  return {
-    shippingName: shipping.name ?? null,
-    shippingLine1: address.line1 ?? null,
-    shippingLine2: address.line2 ?? null,
-    shippingCity: address.city ?? null,
-    shippingState: address.state ?? null,
-    shippingPostal: address.postal_code ?? null,
-    shippingCountry: address.country ?? null,
-  };
+function createCheckoutIntent(args: {
+  orderId: string;
+  amount: number;
+  currency: Currency;
+  email: string;
+}) {
+  const { orderId, amount, currency, email } = args;
+  return getStripe().paymentIntents.create(
+    {
+      amount,
+      currency: currency.toLowerCase(),
+      automatic_payment_methods: { enabled: true },
+      receipt_email: email,
+      metadata: { orderId },
+    },
+    { idempotencyKey: orderId }
+  );
 }
 
 export default factories.createCoreService('api::order.order', () => ({
@@ -72,8 +52,6 @@ export default factories.createCoreService('api::order.order', () => ({
     lines,
   }: CreateWithIntentInput): Promise<CreateWithIntentResult> {
     if (lines.length === 0) throw new Error('empty_cart');
-
-    const stripe = getStripe();
 
     const existing = await strapi
       .documents('api::order.order')
@@ -88,19 +66,15 @@ export default factories.createCoreService('api::order.order', () => ({
       let clientSecret: string | null = null;
 
       if (intentId) {
-        const intent = await stripe.paymentIntents.retrieve(intentId);
+        const intent = await getStripe().paymentIntents.retrieve(intentId);
         clientSecret = intent.client_secret;
       } else {
-        const intent = await stripe.paymentIntents.create(
-          {
-            amount: existing.amountTotal as number,
-            currency: (existing.currency as Currency).toLowerCase(),
-            automatic_payment_methods: { enabled: true },
-            receipt_email: email,
-            metadata: { orderId: existing.documentId },
-          },
-          { idempotencyKey: existing.documentId }
-        );
+        const intent = await createCheckoutIntent({
+          orderId: existing.documentId,
+          amount: existing.amountTotal as number,
+          currency: existing.currency as Currency,
+          email,
+        });
         intentId = intent.id;
         clientSecret = intent.client_secret;
         await strapi.documents('api::order.order').update({
@@ -180,16 +154,12 @@ export default factories.createCoreService('api::order.order', () => ({
       } as never,
     });
 
-    const intent = await stripe.paymentIntents.create(
-      {
-        amount: amountTotal,
-        currency: currency.toLowerCase(),
-        automatic_payment_methods: { enabled: true },
-        receipt_email: email,
-        metadata: { orderId: order.documentId },
-      },
-      { idempotencyKey: order.documentId }
-    );
+    const intent = await createCheckoutIntent({
+      orderId: order.documentId,
+      amount: amountTotal,
+      currency,
+      email,
+    });
 
     await strapi.documents('api::order.order').update({
       documentId: order.documentId,
