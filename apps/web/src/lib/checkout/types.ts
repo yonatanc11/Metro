@@ -7,7 +7,6 @@ export type CheckoutLineInput = {
 
 export type StartCheckoutBody = {
   requestId: string;
-  email: string;
   lines: CheckoutLineInput[];
 };
 
