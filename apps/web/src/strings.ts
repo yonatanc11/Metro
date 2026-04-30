@@ -91,5 +91,21 @@ export const strings = {
     initializing: 'Initializing payment…',
     errorEmptyCart: 'Your cart is empty.',
     errorGeneric: "We couldn't start checkout. Try again.",
+    success: {
+      metaTitle: 'Order Confirmed — Metro',
+      titlePaid: 'Order Confirmed',
+      titlePending: 'Processing Payment',
+      titleFailed: 'Payment Failed',
+      titleCancelled: 'Order Cancelled',
+      orderLabel: 'Order',
+      confirmationSentTo: 'We sent confirmation to',
+      processingNote:
+        "We're confirming your payment with the bank. This usually takes a few seconds.",
+      shippingTo: 'Shipping To',
+      summaryTitle: 'Your Order',
+      total: 'Total',
+      continueShopping: 'Continue Shopping',
+      missingSession: "We couldn't find that order.",
+    },
   },
 } as const;

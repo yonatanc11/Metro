@@ -46,3 +46,15 @@ export async function getOrder(orderId: string): Promise<RedactedOrder> {
   if (!res.ok) throw new CheckoutError(errorCodeFrom(data), res.status);
   return data as RedactedOrder;
 }
+
+export async function getOrderBySession(
+  sessionId: string
+): Promise<RedactedOrder> {
+  const res = await fetch(
+    `/api/checkout/order-by-session/${encodeURIComponent(sessionId)}`,
+    { cache: 'no-store' }
+  );
+  const data: unknown = await res.json().catch(() => null);
+  if (!res.ok) throw new CheckoutError(errorCodeFrom(data), res.status);
+  return data as RedactedOrder;
+}
