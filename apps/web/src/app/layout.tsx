@@ -2,6 +2,7 @@ import './global.css';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
+import { HeaderShell } from '@/components/layout/HeaderShell';
 import { CartProvider } from '@/lib/cart/CartProvider';
 import { ToastProvider } from '@/components/ui/Toast';
 import { strings } from '@/strings';
@@ -33,7 +34,9 @@ export default function RootLayout({
       <body className="bg-background text-on-background font-body antialiased min-h-screen flex flex-col selection:bg-primary selection:text-on-primary">
         <CartProvider>
           <ToastProvider>
-            <SiteHeader />
+            <HeaderShell>
+              <SiteHeader />
+            </HeaderShell>
             {children}
             <SiteFooter />
           </ToastProvider>

@@ -4,6 +4,7 @@ export { PersonIcon } from './PersonIcon';
 export { MenuIcon } from './MenuIcon';
 export { CloseIcon } from './CloseIcon';
 export { ArrowOutwardIcon } from './ArrowOutwardIcon';
+export { ArrowLeftIcon } from './ArrowLeftIcon';
 export { ArrowRightIcon } from './ArrowRightIcon';
 export { StarIcon } from './StarIcon';
 export { ChevronRightIcon } from './ChevronRightIcon';

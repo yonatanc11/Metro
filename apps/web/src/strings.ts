@@ -84,4 +84,12 @@ export const strings = {
     title: 'Something went wrong',
     retry: 'Try again',
   },
+  checkout: {
+    metaTitle: 'Checkout — Metro',
+    backToShop: 'Back to Shop',
+    pageTitle: 'Secure Checkout',
+    initializing: 'Initializing payment…',
+    errorEmptyCart: 'Your cart is empty.',
+    errorGeneric: "We couldn't start checkout. Try again.",
+  },
 } as const;
