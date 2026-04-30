@@ -1,10 +1,4 @@
-const STRAPI_URL = process.env.STRAPI_URL;
-
-if (!STRAPI_URL) {
-  throw new Error(
-    'STRAPI_URL is not set. Add it to apps/web/.env.local (e.g. STRAPI_URL=http://localhost:1337)'
-  );
-}
+const STRAPI_URL_RAW = process.env.STRAPI_URL;
 
 const NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY =
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
@@ -16,6 +10,13 @@ if (!NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
 }
 
 export const env = {
-  STRAPI_URL,
+  get STRAPI_URL(): string {
+    if (!STRAPI_URL_RAW) {
+      throw new Error(
+        'STRAPI_URL is not set. Add it to apps/web/.env.local (e.g. STRAPI_URL=http://localhost:1337)'
+      );
+    }
+    return STRAPI_URL_RAW;
+  },
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-} as const;
+};
