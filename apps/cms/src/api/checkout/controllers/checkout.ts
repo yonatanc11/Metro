@@ -185,15 +185,37 @@ export default {
       return;
     }
 
-    const order = (await strapi.documents('api::order.order').findFirst({
-      filters: { stripeCheckoutSessionId: sessionId } as never,
-      populate: ['lineItems'],
-    })) as (Record<string, unknown> & { documentId: string }) | null;
+    const findOrder = () =>
+      strapi.documents('api::order.order').findFirst({
+        filters: { stripeCheckoutSessionId: sessionId } as never,
+        populate: ['lineItems'],
+      }) as Promise<
+        (Record<string, unknown> & { documentId: string }) | null
+      >;
 
+    let order = await findOrder();
     if (!order) {
       ctx.status = 404;
       ctx.body = { error: 'not_found' };
       return;
+    }
+
+    if (order.status === 'pending') {
+      try {
+        const session = await getStripe().checkout.sessions.retrieve(sessionId);
+        if (session.payment_status === 'paid') {
+          await strapi.service('api::order.order').applyStripeEvent({
+            type: 'checkout.session.completed',
+            data: { object: session as unknown as Record<string, unknown> },
+          });
+          order = (await findOrder()) ?? order;
+        }
+      } catch (err) {
+        strapi.log.warn(
+          `checkout.getOrderBySession: stripe reconciliation failed for ${sessionId}`,
+          err
+        );
+      }
     }
 
     ctx.body = buildRedactedOrder(order);
