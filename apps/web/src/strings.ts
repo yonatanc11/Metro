@@ -86,7 +86,7 @@ export const strings = {
   },
   checkout: {
     metaTitle: 'Checkout — Metro',
-    backToShop: 'Back to Shop',
+    backToCart: 'Back to Cart',
     pageTitle: 'Secure Checkout',
     initializing: 'Initializing payment…',
     errorEmptyCart: 'Your cart is empty.',
