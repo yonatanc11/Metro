@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import type { Currency } from '@/lib/cms/types';
 import { strings } from '@/strings';
 import { formatPrice } from '@/utils/price';
@@ -20,13 +21,12 @@ export function MobileCheckoutBar({ subtotal, currency }: Props) {
           {formatPrice(subtotal, currency)}
         </span>
       </div>
-      <button
-        type="button"
-        disabled
-        className="w-full rounded-lg bg-primary px-6 py-4 font-headline text-base font-bold uppercase tracking-widest text-on-primary shadow-primary-glow transition-transform active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+      <Link
+        href="/checkout"
+        className="block w-full rounded-lg bg-primary px-6 py-4 text-center font-headline text-base font-bold uppercase tracking-widest text-on-primary shadow-primary-glow transition-transform active:scale-95"
       >
         {strings.cart.mobileBar.checkout}
-      </button>
+      </Link>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { LockIcon } from '@/components/ui/icons';
 import type { Currency } from '@/lib/cms/types';
 import { strings } from '@/strings';
@@ -43,13 +44,12 @@ export function CartSummary({ subtotal, currency }: Props) {
         </span>
       </div>
 
-      <button
-        type="button"
-        disabled
-        className="w-full rounded-lg bg-linear-to-r from-primary to-primary-container px-6 py-4 font-headline text-lg font-bold uppercase tracking-widest text-on-primary transition-all duration-300 hover:from-primary-container hover:to-primary active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+      <Link
+        href="/checkout"
+        className="block w-full rounded-lg bg-linear-to-r from-primary to-primary-container px-6 py-4 text-center font-headline text-lg font-bold uppercase tracking-widest text-on-primary transition-all duration-300 hover:from-primary-container hover:to-primary active:scale-[0.98]"
       >
         {strings.cart.summary.checkout}
-      </button>
+      </Link>
 
       <p className="mt-4 flex items-center justify-center gap-2 text-center font-label text-xs text-on-surface-variant">
         <LockIcon className="h-3.5 w-3.5" />
