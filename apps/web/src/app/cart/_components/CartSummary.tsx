@@ -5,6 +5,7 @@ import { LockIcon } from '@/components/ui/icons';
 import type { Currency } from '@/lib/cms/types';
 import { strings } from '@/strings';
 import { formatPrice } from '@/utils/price';
+import { routes } from '@/utils/routes';
 
 type Props = {
   subtotal: number;
@@ -45,7 +46,7 @@ export function CartSummary({ subtotal, currency }: Props) {
       </div>
 
       <Link
-        href="/checkout"
+        href={routes.checkout}
         className="block w-full rounded-lg bg-linear-to-r from-primary to-primary-container px-6 py-4 text-center font-headline text-lg font-bold uppercase tracking-widest text-on-primary transition-all duration-300 hover:from-primary-container hover:to-primary active:scale-[0.98]"
       >
         {strings.cart.summary.checkout}

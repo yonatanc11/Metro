@@ -4,6 +4,7 @@ import { PersonIcon, SearchIcon } from '@/components/ui/icons';
 import { getNavigation } from '@/lib/cms/navigation';
 import { resolveLinkHref } from '@/lib/cms/links';
 import { strings } from '@/strings';
+import { routes } from '@/utils/routes';
 import { CartHeaderLink } from './CartHeaderLink';
 import { MobileNav } from './MobileNav';
 
@@ -17,7 +18,7 @@ export async function SiteHeader() {
         <div className="flex items-center">
           <MobileNav links={links} />
           <Link
-            href="/"
+            href={routes.home}
             className="hidden font-headline text-2xl font-black italic tracking-tighter text-on-background md:block"
           >
             {strings.brand.wordmark}
@@ -25,7 +26,7 @@ export async function SiteHeader() {
         </div>
 
         <Link
-          href="/"
+          href={routes.home}
           className="absolute left-1/2 -translate-x-1/2 font-headline text-2xl font-bold uppercase tracking-tighter text-primary-container md:hidden"
         >
           {strings.brand.wordmark}

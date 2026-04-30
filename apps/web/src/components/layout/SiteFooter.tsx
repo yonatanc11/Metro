@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getFooter } from '@/lib/cms/footer';
 import { resolveLinkHref } from '@/lib/cms/links';
 import { strings } from '@/strings';
+import { routes } from '@/utils/routes';
 
 export async function SiteFooter() {
   const footer = await getFooter();
@@ -14,7 +15,7 @@ export async function SiteFooter() {
     <footer className="hidden w-full border-t border-outline-variant/30 bg-surface-container-lowest py-16 md:block">
       <div className="mx-auto flex w-full max-w-screen-2xl flex-col items-center justify-between gap-8 px-12 md:flex-row">
         <Link
-          href="/"
+          href={routes.home}
           className="font-headline text-lg font-bold italic tracking-tighter text-on-background"
         >
           {strings.brand.wordmark}

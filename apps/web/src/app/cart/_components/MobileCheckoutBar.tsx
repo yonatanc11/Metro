@@ -4,6 +4,7 @@ import Link from 'next/link';
 import type { Currency } from '@/lib/cms/types';
 import { strings } from '@/strings';
 import { formatPrice } from '@/utils/price';
+import { routes } from '@/utils/routes';
 
 type Props = {
   subtotal: number;
@@ -22,7 +23,7 @@ export function MobileCheckoutBar({ subtotal, currency }: Props) {
         </span>
       </div>
       <Link
-        href="/checkout"
+        href={routes.checkout}
         className="block w-full rounded-lg bg-primary px-6 py-4 text-center font-headline text-base font-bold uppercase tracking-widest text-on-primary shadow-primary-glow transition-transform active:scale-95"
       >
         {strings.cart.mobileBar.checkout}

@@ -11,6 +11,7 @@ import { startCheckout, CheckoutError } from '@/lib/checkout/api';
 import { getStripe } from '@/lib/stripe/client';
 import { LockIcon } from '@/components/ui/icons';
 import { strings } from '@/strings';
+import { routes } from '@/utils/routes';
 
 export function CheckoutView() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export function CheckoutView() {
   useEffect(() => {
     if (!hydrated) return;
     if (state.lines.length === 0) {
-      router.replace('/cart');
+      router.replace(routes.cart);
       return;
     }
     if (clientSecret || error) return;

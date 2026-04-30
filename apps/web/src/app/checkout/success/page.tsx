@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { env } from '@/env';
 import { strings } from '@/strings';
 import { formatPrice } from '@/utils/price';
+import { routes } from '@/utils/routes';
 import type { RedactedOrder } from '@/lib/checkout/types';
 import { ClearCartOnMount } from './_components/ClearCartOnMount';
 import { PendingPoll } from './_components/PendingPoll';
@@ -144,7 +145,7 @@ export default async function SuccessPage({
 
       <div className="mt-10 flex justify-center sm:justify-start">
         <Link
-          href="/"
+          href={routes.home}
           className="inline-flex items-center gap-2 rounded-DEFAULT bg-primary px-6 py-3 font-headline text-sm font-bold uppercase tracking-widest text-on-primary transition-colors hover:bg-primary-container"
         >
           {strings.checkout.success.continueShopping}

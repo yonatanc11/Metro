@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCart } from '@/lib/cart/CartProvider';
 import { strings } from '@/strings';
 import { pluralize } from '@/utils/pluralize';
+import { routes } from '@/utils/routes';
 import { CartLineRow } from './CartLineRow';
 import { CartSummary } from './CartSummary';
 import { MobileCheckoutBar } from './MobileCheckoutBar';
@@ -21,7 +22,7 @@ export function CartView() {
           {strings.cart.empty.subtitle}
         </p>
         <Link
-          href="/"
+          href={routes.home}
           className="rounded-lg bg-primary px-6 py-3 font-headline text-sm font-bold uppercase tracking-widest text-on-primary shadow-primary-glow transition-colors hover:bg-primary-container"
         >
           {strings.cart.empty.cta}

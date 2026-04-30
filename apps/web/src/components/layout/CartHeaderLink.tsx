@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { BagIcon } from '@/components/ui/icons';
 import { useCart } from '@/lib/cart/CartProvider';
 import { strings } from '@/strings';
+import { routes } from '@/utils/routes';
 
 export function CartHeaderLink() {
   const { itemCount } = useCart();
@@ -17,7 +18,7 @@ export function CartHeaderLink() {
 
   return (
     <Link
-      href="/cart"
+      href={routes.cart}
       aria-label={label}
       className="relative flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:text-on-background active:scale-95"
     >
