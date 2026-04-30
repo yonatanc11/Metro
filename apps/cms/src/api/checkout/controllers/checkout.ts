@@ -11,11 +11,8 @@ type StartLineInput = {
 
 type StartBody = {
   requestId: string;
-  email: string;
   lines: StartLineInput[];
 };
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const STATUS_FOR_CHECKOUT_ERROR: Record<string, number> = {
   empty_cart: 400,
@@ -33,9 +30,6 @@ function parseStartBody(raw: unknown): StartBody | null {
     return null;
   }
 
-  const email = body.email;
-  if (typeof email !== 'string' || !EMAIL_RE.test(email)) return null;
-
   const lines = body.lines;
   if (!Array.isArray(lines) || lines.length === 0) return null;
 
@@ -50,7 +44,7 @@ function parseStartBody(raw: unknown): StartBody | null {
     parsed.push({ productDocumentId, quantity });
   }
 
-  return { requestId, email, lines: parsed };
+  return { requestId, lines: parsed };
 }
 
 export default {
@@ -65,7 +59,7 @@ export default {
     try {
       const result = await strapi
         .service('api::order.order')
-        .createWithIntent(body);
+        .createWithSession(body);
       ctx.body = result;
     } catch (err: unknown) {
       const code = err instanceof Error ? err.message : '';
@@ -144,7 +138,7 @@ export default {
     ctx.body = {
       orderId: order.documentId,
       status: order.status,
-      email: maskEmail(order.email as string),
+      email: maskEmail(order.email as string | null | undefined),
       currency: order.currency,
       amountSubtotal: order.amountSubtotal,
       amountTotal: order.amountTotal,

@@ -1,4 +1,5 @@
-export function maskEmail(email: string): string {
+export function maskEmail(email: string | null | undefined): string | null {
+  if (!email) return null;
   const at = email.indexOf('@');
   if (at <= 0) return '***';
   const local = email.slice(0, at);

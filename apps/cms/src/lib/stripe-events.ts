@@ -1,13 +1,14 @@
 export type OrderStatus = 'pending' | 'paid' | 'failed' | 'cancelled';
 
 export function statusForEvent(eventType: string): OrderStatus | null {
-  if (eventType === 'payment_intent.succeeded') return 'paid';
-  if (eventType === 'payment_intent.payment_failed') return 'failed';
-  if (eventType === 'payment_intent.canceled') return 'cancelled';
+  if (eventType === 'checkout.session.completed') return 'paid';
+  if (eventType === 'checkout.session.async_payment_succeeded') return 'paid';
+  if (eventType === 'checkout.session.async_payment_failed') return 'failed';
+  if (eventType === 'checkout.session.expired') return 'cancelled';
   return null;
 }
 
-type StripeShipping = {
+type StripeShippingDetails = {
   name?: string | null;
   address?: {
     line1?: string | null;
@@ -19,10 +20,13 @@ type StripeShipping = {
   } | null;
 };
 
-export function shippingFieldsFromIntent(
-  intent: Record<string, unknown>
+export function shippingFieldsFromSession(
+  session: Record<string, unknown>
 ): Record<string, unknown> {
-  const shipping = intent.shipping as StripeShipping | null | undefined;
+  const shipping = session.shipping_details as
+    | StripeShippingDetails
+    | null
+    | undefined;
   if (!shipping) return {};
   const address = shipping.address ?? {};
   return {

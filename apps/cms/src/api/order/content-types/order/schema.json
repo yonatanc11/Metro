@@ -24,8 +24,7 @@
       "unique": true
     },
     "email": {
-      "type": "email",
-      "required": true
+      "type": "email"
     },
     "currency": {
       "type": "enumeration",
@@ -49,6 +48,10 @@
       "required": true
     },
     "stripePaymentIntentId": {
+      "type": "string",
+      "unique": true
+    },
+    "stripeCheckoutSessionId": {
       "type": "string",
       "unique": true
     },

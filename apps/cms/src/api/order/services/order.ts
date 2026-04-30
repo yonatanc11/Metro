@@ -1,8 +1,9 @@
 import { factories } from '@strapi/strapi';
+import Stripe = require('stripe');
 import { getStripe } from '../../../lib/stripe';
 import { toMinorUnits } from '../../../lib/money';
 import {
-  shippingFieldsFromIntent,
+  shippingFieldsFromSession,
   statusForEvent,
 } from '../../../lib/stripe-events';
 
@@ -11,75 +12,117 @@ type LineInput = {
   quantity: number;
 };
 
-type CreateWithIntentInput = {
+type CreateWithSessionInput = {
   requestId: string;
-  email: string;
   lines: LineInput[];
 };
 
 type Currency = 'USD' | 'EUR' | 'ILS';
 
-type CreateWithIntentResult = {
+type CreateWithSessionResult = {
   orderId: string;
   clientSecret: string;
   amountTotal: number;
   currency: Currency;
 };
 
-function createCheckoutIntent(args: {
-  orderId: string;
-  amount: number;
+type LineItemSnapshot = {
+  productDocumentId: string;
+  title: string;
+  brand: string | null;
+  unitPrice: number;
   currency: Currency;
-  email: string;
-}) {
-  const { orderId, amount, currency, email } = args;
-  return getStripe().paymentIntents.create(
-    {
-      amount,
-      currency: currency.toLowerCase(),
-      automatic_payment_methods: { enabled: true },
-      receipt_email: email,
-      metadata: { orderId },
+  quantity: number;
+  imageUrl: string | null;
+};
+
+function getWebUrl(): string {
+  const url = process.env.WEB_PUBLIC_URL;
+  if (!url) throw new Error('WEB_PUBLIC_URL is not set');
+  return url.replace(/\/$/, '');
+}
+
+function buildStripeLineItems(items: LineItemSnapshot[]) {
+  return items.map((item) => ({
+    price_data: {
+      currency: item.currency.toLowerCase(),
+      product_data: {
+        name: item.title,
+        ...(item.brand ? { description: item.brand } : {}),
+        ...(item.imageUrl ? { images: [item.imageUrl] } : {}),
+      },
+      unit_amount: item.unitPrice,
     },
-    { idempotencyKey: orderId }
-  );
+    quantity: item.quantity,
+  }));
+}
+
+type SessionCreateParams = Parameters<
+  Stripe.Stripe['checkout']['sessions']['create']
+>[0];
+
+function buildSessionParams(args: {
+  orderId: string;
+  requestId: string;
+  items: LineItemSnapshot[];
+}): SessionCreateParams {
+  const { orderId, requestId, items } = args;
+  const webUrl = getWebUrl();
+  return {
+    ui_mode: 'embedded_page',
+    mode: 'payment',
+    line_items: buildStripeLineItems(items),
+    return_url: `${webUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+    shipping_address_collection: {
+      allowed_countries: ['US', 'CA', 'GB', 'IL', 'DE', 'FR', 'ES', 'IT', 'NL'],
+    },
+    metadata: { orderId, requestId },
+    payment_intent_data: { metadata: { orderId } },
+  };
 }
 
 export default factories.createCoreService('api::order.order', () => ({
-  async createWithIntent({
+  async createWithSession({
     requestId,
-    email,
     lines,
-  }: CreateWithIntentInput): Promise<CreateWithIntentResult> {
+  }: CreateWithSessionInput): Promise<CreateWithSessionResult> {
     if (lines.length === 0) throw new Error('empty_cart');
 
     const existing = await strapi
       .documents('api::order.order')
-      .findFirst({ filters: { requestId } as never });
+      .findFirst({
+        filters: { requestId } as never,
+        populate: ['lineItems'],
+      });
 
     if (existing) {
       if (existing.status !== 'pending') {
         throw new Error('order_not_pending');
       }
 
-      let intentId = existing.stripePaymentIntentId as string | null;
+      let sessionId = existing.stripeCheckoutSessionId as string | null;
       let clientSecret: string | null = null;
 
-      if (intentId) {
-        const intent = await getStripe().paymentIntents.retrieve(intentId);
-        clientSecret = intent.client_secret;
-      } else {
-        const intent = await createCheckoutIntent({
-          orderId: existing.documentId,
-          amount: existing.amountTotal as number,
-          currency: existing.currency as Currency,
-          email,
-        });
-        intentId = intent.id;
-        clientSecret = intent.client_secret;
+      if (sessionId) {
+        const session = await getStripe().checkout.sessions.retrieve(sessionId);
+        clientSecret = session.client_secret;
+      }
+
+      if (!clientSecret) {
+        const session = await getStripe().checkout.sessions.create(
+          buildSessionParams({
+            orderId: existing.documentId,
+            requestId,
+            items: (existing as unknown as { lineItems: LineItemSnapshot[] })
+              .lineItems,
+          }),
+          { idempotencyKey: requestId }
+        );
+        sessionId = session.id;
+        clientSecret = session.client_secret;
         await strapi.documents('api::order.order').update({
           documentId: existing.documentId,
-          data: { stripePaymentIntentId: intentId } as never,
+          data: { stripeCheckoutSessionId: sessionId } as never,
         });
       }
 
@@ -110,7 +153,7 @@ export default factories.createCoreService('api::order.order', () => ({
       ])
     );
 
-    const lineItems: Array<Record<string, unknown>> = [];
+    const lineItems: LineItemSnapshot[] = [];
     let amountSubtotal = 0;
     let currency: Currency | null = null;
 
@@ -129,8 +172,8 @@ export default factories.createCoreService('api::order.order', () => ({
       const brand = product.brand as { name?: string } | undefined;
 
       lineItems.push({
-        productDocumentId: product.documentId,
-        title: product.title,
+        productDocumentId: product.documentId as string,
+        title: product.title as string,
         brand: brand?.name ?? null,
         unitPrice,
         currency: productCurrency,
@@ -146,7 +189,6 @@ export default factories.createCoreService('api::order.order', () => ({
       data: {
         status: 'pending',
         requestId,
-        email,
         currency,
         amountSubtotal,
         amountTotal,
@@ -154,23 +196,25 @@ export default factories.createCoreService('api::order.order', () => ({
       } as never,
     });
 
-    const intent = await createCheckoutIntent({
-      orderId: order.documentId,
-      amount: amountTotal,
-      currency,
-      email,
-    });
+    const session = await getStripe().checkout.sessions.create(
+      buildSessionParams({
+        orderId: order.documentId,
+        requestId,
+        items: lineItems,
+      }),
+      { idempotencyKey: requestId }
+    );
 
     await strapi.documents('api::order.order').update({
       documentId: order.documentId,
-      data: { stripePaymentIntentId: intent.id } as never,
+      data: { stripeCheckoutSessionId: session.id } as never,
     });
 
-    if (!intent.client_secret) throw new Error('checkout_failed');
+    if (!session.client_secret) throw new Error('checkout_failed');
 
     return {
       orderId: order.documentId,
-      clientSecret: intent.client_secret,
+      clientSecret: session.client_secret,
       amountTotal,
       currency,
     };
@@ -186,17 +230,23 @@ export default factories.createCoreService('api::order.order', () => ({
       return;
     }
 
-    const intent = event.data.object;
-    const intentId = intent.id as string | undefined;
-    if (!intentId) return;
+    const session = event.data.object;
+    const metadata = session.metadata as { orderId?: string } | null | undefined;
+    const orderId = metadata?.orderId;
+    if (!orderId) {
+      strapi.log.warn(
+        `stripe webhook: ${event.type} missing metadata.orderId (session ${session.id})`
+      );
+      return;
+    }
 
     const order = await strapi
       .documents('api::order.order')
-      .findFirst({ filters: { stripePaymentIntentId: intentId } as never });
+      .findOne({ documentId: orderId });
 
     if (!order) {
       strapi.log.warn(
-        `stripe webhook: no order matches paymentIntent ${intentId}`
+        `stripe webhook: order ${orderId} not found for ${event.type}`
       );
       return;
     }
@@ -204,9 +254,24 @@ export default factories.createCoreService('api::order.order', () => ({
     if (order.status === newStatus) return;
 
     const data: Record<string, unknown> = { status: newStatus };
+
     if (newStatus === 'paid') {
       data.paidAt = new Date().toISOString();
-      Object.assign(data, shippingFieldsFromIntent(intent));
+
+      const customer = session.customer_details as
+        | { email?: string }
+        | null
+        | undefined;
+      if (customer?.email && !order.email) {
+        data.email = customer.email;
+      }
+
+      const paymentIntent = session.payment_intent;
+      if (typeof paymentIntent === 'string' && !order.stripePaymentIntentId) {
+        data.stripePaymentIntentId = paymentIntent;
+      }
+
+      Object.assign(data, shippingFieldsFromSession(session));
     }
 
     await strapi.documents('api::order.order').update({
