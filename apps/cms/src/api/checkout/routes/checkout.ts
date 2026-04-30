@@ -30,5 +30,15 @@ export default {
         middlewares: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/checkout/order-by-session/:sessionId',
+      handler: 'checkout.getOrderBySession',
+      config: {
+        auth: false,
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };

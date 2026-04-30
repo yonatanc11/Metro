@@ -21,6 +21,42 @@ const STATUS_FOR_CHECKOUT_ERROR: Record<string, number> = {
   order_not_pending: 409,
 };
 
+function buildRedactedOrder(
+  order: Record<string, unknown> & { documentId: string }
+) {
+  return {
+    orderId: order.documentId,
+    status: order.status,
+    email: maskEmail(order.email as string | null | undefined),
+    currency: order.currency,
+    amountSubtotal: order.amountSubtotal,
+    amountTotal: order.amountTotal,
+    lineItems: ((order.lineItems as Array<Record<string, unknown>>) ?? []).map(
+      (item) => ({
+        productDocumentId: item.productDocumentId,
+        title: item.title,
+        brand: item.brand ?? null,
+        unitPrice: item.unitPrice,
+        currency: item.currency,
+        quantity: item.quantity,
+        imageUrl: item.imageUrl ?? null,
+      })
+    ),
+    paidAt: order.paidAt ?? null,
+    shipping: order.shippingName
+      ? {
+          name: order.shippingName,
+          line1: order.shippingLine1 ?? null,
+          line2: order.shippingLine2 ?? null,
+          city: order.shippingCity ?? null,
+          state: order.shippingState ?? null,
+          postal: order.shippingPostal ?? null,
+          country: order.shippingCountry ?? null,
+        }
+      : null,
+  };
+}
+
 function parseStartBody(raw: unknown): StartBody | null {
   if (!raw || typeof raw !== 'object') return null;
   const body = raw as Record<string, unknown>;
@@ -135,36 +171,31 @@ export default {
       return;
     }
 
-    ctx.body = {
-      orderId: order.documentId,
-      status: order.status,
-      email: maskEmail(order.email as string | null | undefined),
-      currency: order.currency,
-      amountSubtotal: order.amountSubtotal,
-      amountTotal: order.amountTotal,
-      lineItems: ((order.lineItems as Array<Record<string, unknown>>) ?? []).map(
-        (item) => ({
-          productDocumentId: item.productDocumentId,
-          title: item.title,
-          brand: item.brand ?? null,
-          unitPrice: item.unitPrice,
-          currency: item.currency,
-          quantity: item.quantity,
-          imageUrl: item.imageUrl ?? null,
-        })
-      ),
-      paidAt: order.paidAt ?? null,
-      shipping: order.shippingName
-        ? {
-            name: order.shippingName,
-            line1: order.shippingLine1 ?? null,
-            line2: order.shippingLine2 ?? null,
-            city: order.shippingCity ?? null,
-            state: order.shippingState ?? null,
-            postal: order.shippingPostal ?? null,
-            country: order.shippingCountry ?? null,
-          }
-        : null,
-    };
+    ctx.body = buildRedactedOrder(order);
+  },
+
+  async getOrderBySession(ctx: Context) {
+    const sessionId = ctx.params.sessionId;
+    if (
+      typeof sessionId !== 'string' ||
+      !/^cs_(test|live)_[A-Za-z0-9]+$/.test(sessionId)
+    ) {
+      ctx.status = 400;
+      ctx.body = { error: 'invalid_id' };
+      return;
+    }
+
+    const order = (await strapi.documents('api::order.order').findFirst({
+      filters: { stripeCheckoutSessionId: sessionId } as never,
+      populate: ['lineItems'],
+    })) as (Record<string, unknown> & { documentId: string }) | null;
+
+    if (!order) {
+      ctx.status = 404;
+      ctx.body = { error: 'not_found' };
+      return;
+    }
+
+    ctx.body = buildRedactedOrder(order);
   },
 };
